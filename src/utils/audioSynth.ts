@@ -1,5 +1,5 @@
 // Web Audio API Ambient Synthesizer for Dhaba on Highway
-// Provides reliable rain, highway rumble, crickets soundscapes, horn variations, radio static & kitchen sounds
+// Provides reliable rain, highway rumble, crickets soundscapes, custom truck horn audio, radio static & kitchen sounds
 
 class AmbientSynthesizer {
   private ctx: AudioContext | null = null;
@@ -152,8 +152,25 @@ class AmbientSynthesizer {
     }
   }
 
-  // 4 Horn variations: 0=Classic, 1=Deep pressure, 2=Double blast, 3=Air horn
-  public playTruckHorn(variant = Math.floor(Math.random() * 4)) {
+  // Play uploaded custom truck horn audio file (truck-horn.ogg)
+  public playTruckHorn() {
+    try {
+      const hornAudio = new Audio('./truck-horn.ogg');
+      hornAudio.volume = 0.85;
+      const promise = hornAudio.play();
+      if (promise !== undefined) {
+        promise.catch((err) => {
+          console.warn('Custom horn playback fallback to synth:', err);
+          this.playSynthTruckHorn();
+        });
+      }
+    } catch (e) {
+      this.playSynthTruckHorn();
+    }
+  }
+
+  // Fallback Web Audio synth horn if audio file is blocked
+  private playSynthTruckHorn(variant = Math.floor(Math.random() * 4)) {
     if (!this.ctx || !this.masterGain) return;
     try {
       const now = this.ctx.currentTime;
@@ -189,7 +206,7 @@ class AmbientSynthesizer {
       osc1.stop(now + 0.65);
       osc2.stop(now + 0.65);
     } catch (e) {
-      console.warn('Could not play truck horn:', e);
+      console.warn('Could not play truck horn synth:', e);
     }
   }
 
