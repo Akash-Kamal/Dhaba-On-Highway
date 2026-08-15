@@ -7,13 +7,14 @@ interface HighwayShayariOverlayProps {
   reducedMotion: boolean;
 }
 
-// Positions designed to strictly clear the big center title ("DHABA ON HIGHWAY") on mobile & desktop
+// Positions designed to strictly clear the top title logo ("DHABA ON HIGHWAY") and bottom player bar on mobile & desktop
 const CLEAR_POSITIONS = [
-  'top-[12%] left-[4%] sm:top-[16%] sm:left-[8%]',
-  'top-[12%] right-[4%] sm:top-[16%] sm:right-[8%]',
-  'bottom-[25%] left-[4%] sm:bottom-[32%] sm:left-[8%]',
-  'bottom-[25%] right-[4%] sm:bottom-[32%] sm:right-[8%]',
+  'bottom-[24%] left-[3%] sm:top-[16%] sm:left-[8%]',
+  'bottom-[24%] right-[3%] sm:top-[16%] sm:right-[8%]',
+  'bottom-[36%] left-[3%] sm:bottom-[32%] sm:left-[8%]',
+  'bottom-[36%] right-[3%] sm:bottom-[32%] sm:right-[8%]',
 ];
+
 
 export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
   enabled,
