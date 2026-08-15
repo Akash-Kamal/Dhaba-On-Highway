@@ -90,39 +90,32 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
       {/* Main Scene Content */}
       {children}
 
-      {/* LEFT SIDE: DESI INDIAN TRUCK HORN BADGE (AUTHENTIC HIGHWAY VIBE) */}
-      <div className="fixed top-24 sm:top-28 left-3 sm:left-6 z-30 select-none origin-top-left">
+      {/* LEFT SIDE: CREATIVE COMPACT DESI TRUCK HORN BADGE */}
+      <div className="fixed top-20 sm:top-24 left-3 sm:left-5 z-30 select-none origin-top-left">
         <button
           onClick={handleTruckClick}
-          className={`group relative flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 border-2 border-red-600 text-neutral-950 shadow-[0_8px_25px_rgba(234,179,8,0.4)] hover:shadow-[0_12px_35px_rgba(234,179,8,0.6)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
-            isHonking ? 'animate-bounce ring-4 ring-red-500/80' : ''
+          className={`group relative flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-red-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_20px_rgba(234,179,8,0.5)] hover:shadow-[0_6px_25px_rgba(234,179,8,0.8)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
+            isHonking ? 'animate-bounce ring-2 ring-red-400' : ''
           }`}
           title="Click for Desi Truck Horn"
           aria-label="Honk Desi Truck Horn"
         >
-          {/* Outer Painted Corner Accents */}
-          <span className="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-red-700 pointer-events-none" />
-          <span className="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-red-700 pointer-events-none" />
-
-          {/* Desi Horn Icon / Art */}
-          <div className="relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-red-700 text-amber-300 border border-amber-300 font-bold shrink-0 shadow-inner">
-            <span className="text-base sm:text-lg leading-none">🚛</span>
+          {/* Circular Truck Art Mini Icon */}
+          <div className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-red-700 text-yellow-300 border border-yellow-300 font-bold shrink-0 shadow-md">
+            <span className="text-xs sm:text-sm leading-none">🎺</span>
             {isHonking && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-400"></span>
               </span>
             )}
           </div>
 
-          {/* Indian Truck Style Painted Typography */}
-          <div className="flex flex-col text-left leading-none font-display">
-            <div className="text-[10px] sm:text-xs font-black tracking-widest text-red-900 uppercase">
-              INDIAN TRUCK
-            </div>
-            <div className="text-xs sm:text-sm font-extrabold tracking-wider text-black flex items-center gap-1">
+          {/* Creative Compact Painted Typography */}
+          <div className="flex flex-col text-left leading-tight font-mono">
+            <div className="text-[9px] sm:text-[10px] font-black tracking-widest text-red-950 uppercase flex items-center gap-1">
               <span>HORN OK PLEASE</span>
-              <Volume2 className={`w-3.5 h-3.5 text-red-800 ${isHonking ? 'animate-ping' : ''}`} />
+              <Volume2 className={`w-3 h-3 text-red-900 ${isHonking ? 'animate-ping' : ''}`} />
             </div>
           </div>
         </button>
