@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon, HelpCircle, Info, ChevronDown } from 'lucide-react';
+import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon, HelpCircle, Info, ChevronDown, Scale } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 
 interface MenuProps {
@@ -59,7 +59,7 @@ export const Menu: React.FC<MenuProps> = ({
       <div
         className="relative w-full max-w-xl bg-[#0b0907] border border-amber-800/40 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 text-amber-100/90 overflow-y-auto max-h-[90vh] custom-scrollbar"
         role="dialog"
-        aria-label="Dhaba Menu, About & FAQ Settings"
+        aria-label="Dhaba Menu, About, FAQ & Legal Settings"
       >
         {/* Close Button */}
         <button
@@ -154,6 +154,75 @@ export const Menu: React.FC<MenuProps> = ({
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* ── CREDITS & LEGAL (NON-COMMERCIAL / FOR FUN DISCLOSURE) ── */}
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
+          <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
+            <Scale className="w-4 h-4 text-amber-400" />
+            <span>CREDITS & LEGAL</span>
+          </h3>
+
+          <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-900/30 space-y-4 text-xs text-amber-200/90 leading-relaxed font-sans">
+            {/* Made for Fun, Not for Profit */}
+            <div className="space-y-1.5">
+              <h4 className="font-bold text-amber-300 font-mono text-xs uppercase tracking-wider">
+                Made for Fun, Not for Profit
+              </h4>
+              <p>
+                <strong>Dhaba On Highway is an independent, non-commercial project created purely for fun, nostalgia, and entertainment.</strong>
+              </p>
+              <p>The website is not created to generate revenue or profit.</p>
+              <p className="font-mono text-[11px] text-amber-400/80">There are:</p>
+              <ul className="list-disc list-inside space-y-0.5 text-[11px] text-amber-300/80 pl-1">
+                <li>No paid subscriptions</li>
+                <li>No ticketing or paid access</li>
+                <li>No music sales</li>
+                <li>No downloadable music</li>
+                <li>No paid playlist</li>
+                <li>No commercial licensing of the featured songs</li>
+                <li>No advertising revenue generated from the music</li>
+                <li>No sale of third-party music or content</li>
+              </ul>
+              <p className="pt-1">
+                The project is intended simply as a nostalgic digital experience for people who enjoy Indian highway culture and music.
+              </p>
+            </div>
+
+            {/* Important Copyright Notice */}
+            <div className="space-y-1.5 pt-2 border-t border-amber-900/20">
+              <h4 className="font-bold text-amber-300 font-mono text-xs uppercase tracking-wider">
+                Important Copyright Notice
+              </h4>
+              <p>
+                Although Dhaba On Highway is non-commercial and created purely for fun, this statement <strong>does not mean that third-party music is owned or licensed by Dhaba On Highway</strong>.
+              </p>
+              <p>
+                All songs, recordings, music videos, artwork, trademarks, and other third-party content remain the property of their respective copyright owners.
+              </p>
+              <p>
+                Music is accessed through the existing <strong>YouTube embedded player</strong>, and Dhaba On Highway does not host or distribute copies of the music files.
+              </p>
+            </div>
+
+            {/* No Affiliation */}
+            <div className="space-y-1.5 pt-2 border-t border-amber-900/20">
+              <h4 className="font-bold text-amber-300 font-mono text-xs uppercase tracking-wider">
+                No Affiliation
+              </h4>
+              <p>
+                <strong>Dhaba On Highway is not affiliated with, sponsored by, endorsed by, or officially connected to YouTube, Google, any record label, film studio, music publisher, artist, singer, composer, or other rights holder unless explicitly stated otherwise.</strong>
+              </p>
+            </div>
+
+            {/* Project Creator */}
+            <div className="pt-2 border-t border-amber-900/20 font-mono text-xs text-amber-300">
+              <div className="font-bold">Created & Coded by Akash Kamal</div>
+              <div className="text-[11px] text-amber-400/80">
+                An independent personal/creative web project made for fun, nostalgia, and the love of Indian highway culture.
+              </div>
+            </div>
           </div>
         </div>
 
