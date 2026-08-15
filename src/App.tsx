@@ -180,49 +180,9 @@ export function App() {
                   isPlaylistOpen={isPlaylistOpen}
                 />
 
-                {/* Center Bottom Attribution & Non-Commercial Footer */}
-                <div className="text-center text-xs font-mono tracking-wider text-amber-300/80 select-none pt-1 space-y-0.5">
-                  <div className="font-bold text-amber-200 uppercase tracking-widest text-[11px]">
-                    DHABA ON HIGHWAY
-                  </div>
-                  <div className="text-[10px] text-amber-400/80 italic font-sans">
-                    A nostalgic highway music experience — made for fun, not profit.
-                  </div>
-                  <div className="text-[11px] pt-0.5">
-                    Created & Coded by <span className="text-amber-200 font-semibold">Akash Kamal</span>
-                  </div>
-                  <div className="text-[9px] text-amber-500/70 max-w-md mx-auto leading-tight font-sans">
-                    Music is played through YouTube's embedded player. All third-party content belongs to its respective rights holders.
-                  </div>
-                  <div className="pt-1 flex items-center justify-center gap-2 text-[10px] text-amber-400 font-mono">
-                    <button
-                      onClick={() => {
-                        ambientSynth.playSwitchClick();
-                        setIsMenuOpen(true);
-                      }}
-                      className="hover:text-amber-100 hover:underline cursor-pointer"
-                    >
-                      Credits & Legal
-                    </button>
-                    <span>·</span>
-                    <a
-                      href="https://www.youtube.com/t/terms"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-amber-100 hover:underline"
-                    >
-                      YouTube Terms
-                    </a>
-                    <span>·</span>
-                    <a
-                      href="https://policies.google.com/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-amber-100 hover:underline"
-                    >
-                      Privacy
-                    </a>
-                  </div>
+                {/* Center Bottom Attribution */}
+                <div className="text-center text-xs font-mono tracking-widest text-amber-300/70 select-none pt-0.5">
+                  Created & Coded by <span className="text-amber-200 font-semibold">Akash Kamal</span> ❤️
                 </div>
               </div>
             </div>

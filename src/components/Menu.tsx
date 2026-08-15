@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon, HelpCircle, Info, ChevronDown, Scale } from 'lucide-react';
+import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon, HelpCircle, Info, ChevronDown, Scale, ExternalLink } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
 
 interface MenuProps {
@@ -84,6 +84,50 @@ export const Menu: React.FC<MenuProps> = ({
           </p>
         </div>
 
+        {/* ── LEGAL & POLICY LINKS SECTION (ACCESSIBLE FROM 3-LINE MENU) ── */}
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
+          <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>LEGAL & POLICIES</span>
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-xs">
+            <a
+              href="#credits-legal"
+              onClick={(e) => {
+                e.preventDefault();
+                ambientSynth.playSwitchClick();
+                const el = document.getElementById('credits-legal-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="p-2.5 rounded-xl border border-amber-800/40 bg-black/50 hover:bg-amber-950/60 text-amber-300 hover:text-amber-100 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Scale className="w-3.5 h-3.5 text-amber-400" />
+              <span>Credits & Legal</span>
+            </a>
+
+            <a
+              href="https://www.youtube.com/t/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl border border-amber-800/40 bg-black/50 hover:bg-amber-950/60 text-amber-300 hover:text-amber-100 flex items-center justify-center gap-1.5 transition-all"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+              <span>YouTube Terms</span>
+            </a>
+
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl border border-amber-800/40 bg-black/50 hover:bg-amber-950/60 text-amber-300 hover:text-amber-100 flex items-center justify-center gap-1.5 transition-all"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+              <span>Privacy Policy</span>
+            </a>
+          </div>
+        </div>
+
         {/* ── ABOUT DHABA ON HIGHWAY SECTION ── */}
         <div className="space-y-3 pt-3 border-t border-amber-900/40">
           <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
@@ -158,7 +202,7 @@ export const Menu: React.FC<MenuProps> = ({
         </div>
 
         {/* ── CREDITS & LEGAL (NON-COMMERCIAL / FOR FUN DISCLOSURE) ── */}
-        <div className="space-y-3 pt-3 border-t border-amber-900/40">
+        <div id="credits-legal-section" className="space-y-3 pt-3 border-t border-amber-900/40">
           <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
             <Scale className="w-4 h-4 text-amber-400" />
             <span>CREDITS & LEGAL</span>
