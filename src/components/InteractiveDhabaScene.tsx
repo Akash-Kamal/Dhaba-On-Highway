@@ -129,7 +129,8 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
       </div>
 
       {/* RIGHT SIDE: Interactive Environment Hotspots Floating Dock */}
-      <div className="fixed top-24 sm:top-28 right-3 sm:right-6 z-30 flex flex-col items-end gap-1.5 sm:gap-2 select-none scale-90 sm:scale-100 origin-top-right">
+      <div className="fixed top-32 sm:top-36 right-3 sm:right-6 z-30 flex flex-col items-end gap-1.5 sm:gap-2 select-none scale-90 sm:scale-100 origin-top-right">
+
         {/* Bhaiya Waiter Hotspot */}
         <button
           onClick={() => setIsBhaiyaOpen(true)}
