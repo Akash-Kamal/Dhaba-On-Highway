@@ -17,6 +17,7 @@ interface MusicPlayerProps {
   onTogglePlaylist?: () => void;
   isPlaylistOpen?: boolean;
   onUpdatePlaylistId?: (id: string) => void;
+  autoPlayTrigger?: boolean;
 }
 
 const formatTime = (seconds: number): string => {
@@ -26,7 +27,7 @@ const formatTime = (seconds: number): string => {
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 };
 
-export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
+export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId, autoPlayTrigger }) => {
   const playerRef = useRef<YTPlayer | null>(null);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -46,6 +47,21 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     author: 'Kumar Sanu & Alka Yagnik',
     id: '2V56f0xBNsw',
   });
+
+  // Trigger auto-play when autoPlayTrigger becomes true (5s after Journey Start)
+  useEffect(() => {
+    if (autoPlayTrigger && playerRef.current) {
+      try {
+        const p = playerRef.current;
+        p.unMute();
+        p.setVolume(volume || 80);
+        p.playVideo();
+        setIsPlaying(true);
+      } catch (e) {
+        console.warn('AutoPlay trigger deferred:', e);
+      }
+    }
+  }, [autoPlayTrigger]);
 
   // Fast smooth playback time tracking (every 250ms)
   useEffect(() => {
@@ -162,6 +178,13 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
         onPlayerReady={(p) => {
           playerRef.current = p;
           p.setVolume(volume);
+          if (autoPlayTrigger) {
+            try {
+              p.unMute();
+              p.playVideo();
+              setIsPlaying(true);
+            } catch (e) {}
+          }
         }}
         onSongChange={(info) => {
           if (info) {

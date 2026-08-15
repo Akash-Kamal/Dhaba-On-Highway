@@ -29,6 +29,8 @@ export function App() {
   const [isHindiDhaba, setIsHindiDhaba] = useState<boolean>(false);
 
 
+  const [autoPlayMusic, setAutoPlayMusic] = useState<boolean>(false);
+
   // Time of Day determination based on real clock
   const timeOfDay = useMemo(() => {
     const hour = new Date().getHours();
@@ -44,6 +46,11 @@ export function App() {
     setIntroVisible(false);
     ambientSynth.init();
     ambientSynth.setVolume(ambienceVolume / 100);
+
+    // Automatically start playing music 5 seconds after user clicks "Start the Journey"
+    setTimeout(() => {
+      setAutoPlayMusic(true);
+    }, 5000);
   };
 
   // Toggle Ambience Mute
@@ -178,6 +185,7 @@ export function App() {
                   playlistId={playlistId}
                   onTogglePlaylist={() => setIsPlaylistOpen((prev) => !prev)}
                   isPlaylistOpen={isPlaylistOpen}
+                  autoPlayTrigger={autoPlayMusic}
                 />
 
                 {/* Center Bottom Attribution */}
