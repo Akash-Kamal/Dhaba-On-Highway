@@ -114,11 +114,14 @@ export function App() {
                   ambientSynth.playSwitchClick();
                   setIsHindiDhaba((prev) => !prev);
                 }}
-                className="font-truck-brand text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 select-none group"
+                className={`text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 select-none group ${
+                  isHindiDhaba ? 'font-chandra' : 'font-truck-brand'
+                }`}
                 title="Click to toggle English / Hindi (DHABA ⇄ ढाबा)"
               >
                 <span>{isHindiDhaba ? 'ढाबा' : 'DHABA'}</span>
               </h1>
+
 
 
               {/* Line 2: = ON HIGHWAY = */}

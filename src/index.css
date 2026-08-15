@@ -26,6 +26,18 @@ body {
 .font-devanagari { font-family: var(--font-devanagari); }
 .font-truck-brand { font-family: var(--font-truck); }
 
+@font-face {
+  font-family: 'Chandra Head';
+  src: local('Chandra Head Regular'), local('Chandra Head'), local('ChandraHead-Regular'), local('ChandraHead');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-chandra {
+  font-family: 'Chandra Head', 'Chandra Head Regular', 'Noto Sans Devanagari', sans-serif;
+}
+
+
 /* Weathered cream & highway amber text styles for logo title */
 .text-weathered-cream {
   color: #e6ded3;
