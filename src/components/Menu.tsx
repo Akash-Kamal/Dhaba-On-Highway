@@ -1,7 +1,6 @@
-import React from 'react';
-import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Sparkles, Eye, ShieldCheck, CloudRain, Sun, CloudFog, Moon, HelpCircle, Info, ChevronDown } from 'lucide-react';
 import { ambientSynth } from '../utils/audioSynth';
-
 
 interface MenuProps {
   isOpen: boolean;
@@ -24,14 +23,43 @@ export const Menu: React.FC<MenuProps> = ({
   shayariEnabled,
   onToggleShayari,
 }) => {
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
   if (!isOpen) return null;
+
+  const faqData = [
+    {
+      q: 'What is Dhaba On Highway?',
+      a: 'Dhaba On Highway is a digital nostalgia experience inspired by Indian highway culture — decorated trucks, roadside dhabas, chai, night drives, and the songs that became part of those journeys.',
+    },
+    {
+      q: 'What songs are on Dhaba On Highway?',
+      a: 'The playlist features a collection of nostalgic Bollywood, Punjabi, and Bhojpuri tracks, bringing together familiar voices and songs associated with classic Indian road-trip culture.\n\nThe complete tracklist is available in the Dhaba On Highway player.',
+    },
+    {
+      q: 'Who created Dhaba On Highway?',
+      a: 'Dhaba On Highway was created and coded by Akash Kamal.\n\nThe concept is an original digital experience built around the nostalgia of Indian highways, dhabas, trucks, music, and long-distance journeys.',
+    },
+    {
+      q: 'Is there an app, login, or cost?',
+      a: 'No. There is no login, no subscription, no paywall, and no app required.\n\nJust open the website, press play, and enjoy the journey.',
+    },
+    {
+      q: 'Where does the audio come from?',
+      a: 'The music is played through embedded YouTube videos.\n\nDhaba On Highway does not host, upload, or stream the audio files itself.\n\nThe website acts as a visual and interactive interface for playing the selected YouTube content.',
+    },
+    {
+      q: 'Who made Dhaba On Highway?',
+      a: 'Created & Coded by Akash Kamal.\n\nDhaba On Highway is built as a tribute to the feeling of travelling through India at night — one song, one highway, and one dhaba at a time.',
+    },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl transition-opacity select-none">
       <div
-        className="relative w-full max-w-lg bg-[#0b0907] border border-amber-800/40 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 text-amber-100/90 overflow-y-auto max-h-[90vh]"
+        className="relative w-full max-w-xl bg-[#0b0907] border border-amber-800/40 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 text-amber-100/90 overflow-y-auto max-h-[90vh] custom-scrollbar"
         role="dialog"
-        aria-label="Dhaba Menu and Experience Settings"
+        aria-label="Dhaba Menu, About & FAQ Settings"
       >
         {/* Close Button */}
         <button
@@ -42,7 +70,7 @@ export const Menu: React.FC<MenuProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Header */}
+        {/* Main Header */}
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-500 uppercase tracking-widest">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -56,8 +84,81 @@ export const Menu: React.FC<MenuProps> = ({
           </p>
         </div>
 
+        {/* ── ABOUT DHABA ON HIGHWAY SECTION ── */}
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
+          <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
+            <Info className="w-4 h-4 text-amber-400" />
+            <span>ABOUT DHABA ON HIGHWAY</span>
+          </h3>
+
+          <div className="p-4 rounded-xl bg-amber-950/25 border border-amber-900/35 space-y-3 text-xs sm:text-sm text-amber-200/90 leading-relaxed font-sans">
+            <p>
+              <strong>Dhaba On Highway</strong> is a nostalgic highway music experience created around the feeling of late-night Indian road journeys — the sound of an old car stereo, colourful trucks passing by, roadside dhabas, chai, and the timeless songs that made every highway drive feel like a story.
+            </p>
+            <p>
+              Press play on the <strong>Dhaba On Highway</strong> player and let the journey begin.
+            </p>
+            <p>
+              The playlist brings together classic <strong>Bollywood, Punjabi, and Bhojpuri songs</strong>, with a strong nostalgic flavour inspired by the music heard on Indian highways and at roadside dhabas.
+            </p>
+            <p>
+              It is made for long drives, lonely roads, chai breaks, and anyone who misses that old-school Indian highway atmosphere.
+            </p>
+            <p className="text-amber-400/80 text-xs font-mono pt-1 border-t border-amber-900/20">
+              Every track is played through <strong>YouTube's embedded player</strong>. Dhaba On Highway does <strong>not host or store the audio files itself</strong>.
+            </p>
+            <div className="pt-1 font-mono text-xs text-amber-300 font-bold">
+              Created & Coded by Akash Kamal.
+            </div>
+          </div>
+        </div>
+
+        {/* ── FAQ SECTION (EXPANDABLE ACCORDION) ── */}
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
+          <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
+            <HelpCircle className="w-4 h-4 text-amber-400" />
+            <span>FREQUENTLY ASKED QUESTIONS (FAQ)</span>
+          </h3>
+
+          <div className="space-y-2">
+            {faqData.map((item, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-xl bg-black/40 border border-amber-900/30 overflow-hidden transition-all duration-200"
+                >
+                  <button
+                    onClick={() => {
+                      ambientSynth.playSwitchClick();
+                      setOpenFaqIndex(isOpen ? null : idx);
+                    }}
+                    className="w-full p-3.5 text-left flex items-center justify-between gap-3 text-amber-200 hover:text-amber-100 hover:bg-amber-950/30 transition-colors cursor-pointer"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-medium text-xs sm:text-sm font-sans tracking-wide">
+                      {item.q}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-amber-400 shrink-0 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180 text-amber-300' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-3.5 pb-3.5 pt-1 border-t border-amber-900/20 text-xs sm:text-sm text-amber-300/80 leading-relaxed font-sans whitespace-pre-line animate-title-in">
+                      {item.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Weather Mode Selector */}
-        <div className="space-y-3 pt-2 border-t border-amber-900/30">
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
           <h3 className="font-mono text-xs text-amber-400 uppercase tracking-wider font-semibold flex items-center gap-2">
             <CloudRain className="w-4 h-4 text-amber-400" />
             <span>WEATHER ATMOSPHERE</span>
@@ -94,7 +195,7 @@ export const Menu: React.FC<MenuProps> = ({
         </div>
 
         {/* Preferences / Settings */}
-        <div className="space-y-3 pt-2 border-t border-amber-900/30">
+        <div className="space-y-3 pt-3 border-t border-amber-900/40">
           <h3 className="font-mono text-xs text-amber-500 uppercase tracking-wider font-semibold">
             EXPERIENCE SETTINGS
           </h3>
@@ -142,19 +243,14 @@ export const Menu: React.FC<MenuProps> = ({
           </div>
         </div>
 
-
-        {/* Story Atmosphere Quote */}
-        <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-900/30 space-y-2 italic text-amber-200/90 text-xs font-sans leading-relaxed">
-          <p>
-            &ldquo;1:30 AM. Rain on the highway. Trucks passing. Warm dhaba lights. A glass of cutting chai. An old Bollywood song playing on the radio. You are alone, but the highway is still alive.&rdquo;
-          </p>
-        </div>
-
-        {/* Technical Information */}
-        <div className="space-y-1 text-xs font-mono text-amber-500/60 pt-2 border-t border-amber-900/30">
+        {/* Technical & Copyright Information */}
+        <div className="space-y-1 text-xs font-mono text-amber-500/60 pt-3 border-t border-amber-900/40">
           <div className="flex items-center gap-1.5 text-amber-400/80">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
             <span>OFFICIAL YOUTUBE IFRAME API INTEGRATION</span>
+          </div>
+          <div className="text-[11px] text-amber-500/70 pt-0.5">
+            Created & Coded by Akash Kamal.
           </div>
         </div>
       </div>

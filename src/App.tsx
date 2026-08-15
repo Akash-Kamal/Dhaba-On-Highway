@@ -182,7 +182,7 @@ export function App() {
 
                 {/* Center Bottom Attribution */}
                 <div className="text-center text-xs font-mono tracking-widest text-amber-300/70 select-none pt-0.5">
-                  Created by <span className="text-amber-200 font-semibold">Akash Kamal</span> ❤️
+                  Created & Coded by <span className="text-amber-200 font-semibold">Akash Kamal</span> ❤️
                 </div>
               </div>
             </div>
