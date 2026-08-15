@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ambientSynth } from '../utils/audioSynth';
 import { DhabaMenuModal } from './DhabaMenuModal';
 import { BhaiyaDialogModal } from './BhaiyaDialogModal';
-import { Utensils, Lightbulb, Armchair, Sparkles, Volume2 } from 'lucide-react';
+import { Utensils, Lightbulb, Armchair, Sparkles } from 'lucide-react';
 
 interface InteractiveDhabaSceneProps {
   children: React.ReactNode;
@@ -11,6 +11,70 @@ interface InteractiveDhabaSceneProps {
   onToggleCharpaiMode: () => void;
   isCharpaiMode: boolean;
 }
+
+// Retro Vintage Squeeze Bulb Blow Horn SVG Icon matching uploaded image
+const RetroBlowHornIcon: React.FC<{ isHonking: boolean }> = ({ isHonking }) => (
+  <svg
+    viewBox="0 0 210 100"
+    className="w-10 h-5 sm:w-14 sm:h-7 shrink-0 drop-shadow-md"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      {/* Red Rubber Bulb Gradient */}
+      <radialGradient id="bulbGrad" cx="35%" cy="35%" r="65%">
+        <stop offset="0%" stopColor="#ff4d4d" />
+        <stop offset="60%" stopColor="#cc0000" />
+        <stop offset="100%" stopColor="#7a0000" />
+      </radialGradient>
+      {/* Brass Gold Tube Gradient */}
+      <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#ffb703" />
+        <stop offset="50%" stopColor="#fff3b0" />
+        <stop offset="100%" stopColor="#fb8500" />
+      </linearGradient>
+      {/* Trumpet Bell Flare Gradient */}
+      <linearGradient id="flareGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#ffe600" />
+        <stop offset="70%" stopColor="#d4af37" />
+        <stop offset="100%" stopColor="#996515" />
+      </linearGradient>
+    </defs>
+
+    {/* Red Rubber Squeeze Bulb (Left Sphere with squeeze effect when honking) */}
+    <g className={`transition-transform duration-150 origin-[35px_50px] ${isHonking ? 'scale-x-70 scale-y-115' : ''}`}>
+      <circle cx="35" cy="50" r="30" fill="url(#bulbGrad)" stroke="#5e0000" strokeWidth="1.5" />
+      {/* Rubber Bulb Highlight */}
+      <ellipse cx="25" cy="38" rx="9" ry="5" fill="#ffa8a8" opacity="0.65" transform="rotate(-20 25 38)" />
+    </g>
+
+    {/* Gold Collar Connector */}
+    <rect x="62" y="44" width="12" height="12" rx="3" fill="#b37700" stroke="#ffd700" strokeWidth="1" />
+
+    {/* Tapered Brass Tube (From collar to flare) */}
+    <path
+      d="M72 45 L150 35 C155 35 162 20 172 12 L172 88 C162 80 155 65 150 65 L72 55 Z"
+      fill="url(#brassGrad)"
+      stroke="#b37700"
+      strokeWidth="1"
+    />
+    {/* Tube Specular Reflection Streak */}
+    <path d="M75 47 L155 38" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
+
+    {/* Trumpet Mouth Flare Rim (Right Oval Mouth) */}
+    <ellipse cx="172" cy="50" rx="9" ry="38" fill="url(#flareGrad)" stroke="#fff066" strokeWidth="2" />
+    {/* Dark Inside Bell Hole */}
+    <ellipse cx="172" cy="50" rx="5" ry="28" fill="#3a2000" opacity="0.95" />
+
+    {/* Sound Waves when Honking */}
+    {isHonking && (
+      <g className="animate-pulse">
+        <path d="M186 28 C194 38 194 62 186 72" stroke="#ffea00" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M196 18 C206 35 206 65 196 82" stroke="#ffb703" strokeWidth="3.5" strokeLinecap="round" />
+      </g>
+    )}
+  </svg>
+);
 
 export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
   children,
@@ -90,32 +154,26 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
       {/* Main Scene Content */}
       {children}
 
-      {/* LEFT SIDE: CREATIVE COMPACT DESI TRUCK HORN BADGE */}
+      {/* LEFT SIDE: RETRO VINTAGE SQUEEZE BULB TRUCK HORN BADGE (MATCHING UPLOADED IMAGE) */}
       <div className="fixed top-20 sm:top-24 left-3 sm:left-5 z-30 select-none origin-top-left">
         <button
           onClick={handleTruckClick}
-          className={`group relative flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-red-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_20px_rgba(234,179,8,0.5)] hover:shadow-[0_6px_25px_rgba(234,179,8,0.8)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
-            isHonking ? 'animate-bounce ring-2 ring-red-400' : ''
+          className={`group relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_22px_rgba(234,179,8,0.6)] hover:shadow-[0_6px_30px_rgba(234,179,8,0.85)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
+            isHonking ? 'animate-bounce ring-2 ring-red-500' : ''
           }`}
-          title="Click for Desi Truck Horn"
-          aria-label="Honk Desi Truck Horn"
+          title="Click to Squeeze Vintage Blow Horn"
+          aria-label="Squeeze Vintage Blow Horn"
         >
-          {/* Circular Truck Art Mini Icon */}
-          <div className="relative flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-red-700 text-yellow-300 border border-yellow-300 font-bold shrink-0 shadow-md">
-            <span className="text-xs sm:text-sm leading-none">🎺</span>
-            {isHonking && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-400"></span>
-              </span>
-            )}
-          </div>
+          {/* Retro Blow Horn Vector Icon (Red Squeeze Bulb + Gold Brass Trumpet Flare) */}
+          <RetroBlowHornIcon isHonking={isHonking} />
 
-          {/* Creative Compact Painted Typography */}
-          <div className="flex flex-col text-left leading-tight font-mono">
-            <div className="text-[9px] sm:text-[10px] font-black tracking-widest text-red-950 uppercase flex items-center gap-1">
-              <span>HORN OK PLEASE</span>
-              <Volume2 className={`w-3 h-3 text-red-900 ${isHonking ? 'animate-ping' : ''}`} />
+          {/* Creative Truck Art Typography */}
+          <div className="flex flex-col text-left leading-tight font-mono pr-0.5">
+            <div className="text-[10px] sm:text-xs font-black tracking-widest text-red-950 uppercase">
+              HORN OK PLEASE
+            </div>
+            <div className="text-[9px] font-bold text-amber-950/80 tracking-wider">
+              TAP TO SQUEEZE
             </div>
           </div>
         </button>
