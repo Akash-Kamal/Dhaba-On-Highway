@@ -16,7 +16,7 @@ interface InteractiveDhabaSceneProps {
 const RetroBlowHornIcon: React.FC<{ isHonking: boolean }> = ({ isHonking }) => (
   <svg
     viewBox="0 0 210 100"
-    className="w-10 h-5 sm:w-13 sm:h-6.5 shrink-0 drop-shadow-md"
+    className="w-8 h-4 sm:w-9 sm:h-4.5 shrink-0 drop-shadow-md"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -140,7 +140,7 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      {/* Dynamic Interaction Floating Toast (Positioned at top-28/top-32 to NEVER overlap Horn or Dock) */}
+      {/* Dynamic Interaction Floating Toast (Positioned cleanly at top-28/top-32) */}
       {toastMsg && (
         <div className="fixed top-28 sm:top-32 left-1/2 -translate-x-1/2 z-50 max-w-[85vw] sm:max-w-md px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-amber-100 font-devanagari text-xs sm:text-sm font-bold border border-amber-400/50 shadow-2xl animate-title-in backdrop-blur-md flex items-center justify-center gap-2 select-none pointer-events-none text-center">
           <Sparkles className="w-4 h-4 text-amber-300 animate-spin shrink-0" />
@@ -151,29 +151,27 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
       {/* Main Scene Content */}
       {children}
 
-      {/* LEFT SIDE: RETRO VINTAGE SQUEEZE BULB TRUCK HORN BADGE (CLEAN NON-OVERLAPPING POSITIONING) */}
-      <div className="fixed top-14 sm:top-16 left-3 sm:left-5 z-30 select-none origin-top-left">
+      {/* LEFT SIDE: CIRCULAR DESI TRUCK HORN BADGE (PLACED EXACTLY IN RED CIRCLE AREA) */}
+      <div className="fixed top-[70px] sm:top-[76px] left-4 sm:left-6 z-30 select-none origin-top-left group">
         <button
           onClick={handleTruckClick}
-          className={`group relative flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_22px_rgba(234,179,8,0.6)] hover:shadow-[0_6px_30px_rgba(234,179,8,0.85)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
-            isHonking ? 'animate-bounce ring-2 ring-red-500' : ''
+          className={`relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-yellow-400 via-amber-500 to-red-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_6px_25px_rgba(234,179,8,0.7)] hover:shadow-[0_8px_35px_rgba(234,179,8,0.95)] hover:scale-110 active:scale-95 transition-all cursor-pointer ${
+            isHonking ? 'animate-bounce ring-4 ring-red-500/80' : ''
           }`}
-          title="Click to Squeeze Vintage Blow Horn"
-          aria-label="Squeeze Vintage Blow Horn"
+          title="Click to Squeeze Desi Truck Horn (HORN OK PLEASE)"
+          aria-label="Squeeze Desi Truck Horn"
         >
-          {/* Retro Blow Horn Vector Icon */}
-          <RetroBlowHornIcon isHonking={isHonking} />
+          {/* Outer Ring Ripple Pulse */}
+          <span className="absolute inset-0 rounded-full border border-yellow-200/50 animate-ping opacity-20 pointer-events-none" />
 
-          {/* Creative Truck Art Typography */}
-          <div className="flex flex-col text-left leading-tight font-mono pr-0.5">
-            <div className="text-[9px] sm:text-[10px] font-black tracking-widest text-red-950 uppercase">
-              HORN OK PLEASE
-            </div>
-            <div className="text-[8px] sm:text-[9px] font-bold text-amber-950/80 tracking-wider">
-              TAP TO SQUEEZE
-            </div>
-          </div>
+          {/* Retro Blow Horn Vector Icon Centered */}
+          <RetroBlowHornIcon isHonking={isHonking} />
         </button>
+
+        {/* Hover Badge Tooltip */}
+        <div className="absolute top-full left-0 mt-1.5 px-2.5 py-1 rounded-md bg-black/90 text-amber-300 text-[9px] font-mono tracking-widest uppercase border border-amber-500/40 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+          HORN OK PLEASE
+        </div>
       </div>
 
       {/* RIGHT SIDE: Interactive Environment Hotspots Floating Dock */}
