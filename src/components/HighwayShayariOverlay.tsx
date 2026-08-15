@@ -7,14 +7,13 @@ interface HighwayShayariOverlayProps {
   reducedMotion: boolean;
 }
 
-// Positions designed to strictly clear the top title logo ("DHABA ON HIGHWAY") and bottom player bar on mobile & desktop
+// Clear positions strictly designed to avoid overlapping top-left Truck Horn Badge, center logo, and bottom player bar
 const CLEAR_POSITIONS = [
-  'bottom-[24%] left-[3%] sm:top-[16%] sm:left-[8%]',
-  'bottom-[24%] right-[3%] sm:top-[16%] sm:right-[8%]',
-  'bottom-[36%] left-[3%] sm:bottom-[32%] sm:left-[8%]',
-  'bottom-[36%] right-[3%] sm:bottom-[32%] sm:right-[8%]',
+  'top-[24%] right-[4%] sm:top-[20%] sm:right-[10%]',
+  'bottom-[26%] right-[4%] sm:bottom-[28%] sm:right-[10%]',
+  'bottom-[26%] left-[4%] sm:bottom-[28%] sm:left-[10%]',
+  'top-[42%] right-[4%] sm:top-[38%] sm:right-[12%]',
 ];
-
 
 export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
   enabled,
@@ -96,7 +95,7 @@ export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
 
   return (
     <div
-      className={`fixed z-30 max-w-[170px] sm:max-w-sm select-none transition-all duration-1000 group cursor-default ${positionClass} ${
+      className={`fixed z-30 max-w-[200px] sm:max-w-md select-none transition-all duration-1000 group cursor-default ${positionClass} ${
         isEntering
           ? 'opacity-95 translate-y-0 filter-none'
           : 'opacity-0 translate-y-3 blur-sm pointer-events-none'
