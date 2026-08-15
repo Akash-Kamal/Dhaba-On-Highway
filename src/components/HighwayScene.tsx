@@ -28,11 +28,11 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
   const currentPanX = useRef<number>(0);
   const isDragging = useRef<boolean>(false);
 
-  // Responsive pan ranges: On mobile, expand maxPan to 42% to reveal 100% of widescreen artwork
-  const maxPanRange = isMobile ? 42 : 25;
-  const panSensitivity = isMobile ? 0.35 : 0.18;
+  // Responsive pan ranges: Expanded to 48% on mobile to reveal 100% of full widescreen master artwork
+  const maxPanRange = isMobile ? 48 : 28;
+  const panSensitivity = isMobile ? 0.45 : 0.22;
 
-  // ── Touch / Drag 3D Pan Handlers (Full Edge-to-Edge Image Pan) ─────
+  // ── Touch / Drag 3D Pan Handlers (Finger Drag Left to Right / Right to Left) ─────
   const handlePanStart = (clientX: number) => {
     isDragging.current = true;
     touchStartX.current = clientX - (currentPanX.current / panSensitivity);
@@ -46,7 +46,7 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
     currentPanX.current = newPanX;
 
     if (bgRef.current) {
-      bgRef.current.style.transform = `scale(${isMobile ? 1.35 : 1.20}) translate3d(${newPanX}%, 0px, 0px)`;
+      bgRef.current.style.transform = `scale(${isMobile ? 1.45 : 1.22}) translate3d(${newPanX}%, 0px, 0px)`;
     }
   };
 
@@ -59,10 +59,10 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
     const handleGyro = (e: DeviceOrientationEvent) => {
       if (isDragging.current || e.gamma === null) return;
       // Map tilt (-45 deg to +45 deg) to full image pan range
-      const tiltPan = Math.max(-maxPanRange, Math.min(maxPanRange, e.gamma * 0.8));
+      const tiltPan = Math.max(-maxPanRange, Math.min(maxPanRange, e.gamma * 0.9));
       currentPanX.current = tiltPan;
       if (bgRef.current) {
-        bgRef.current.style.transform = `scale(${isMobile ? 1.35 : 1.20}) translate3d(${tiltPan}%, 0px, 0px)`;
+        bgRef.current.style.transform = `scale(${isMobile ? 1.45 : 1.22}) translate3d(${tiltPan}%, 0px, 0px)`;
       }
     };
     window.addEventListener('deviceorientation', handleGyro, true);
@@ -78,8 +78,8 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
     const dy = (e.clientY - cy) / cy;
 
     if (bgRef.current) {
-      const combinedX = currentPanX.current + dx * -1.5;
-      bgRef.current.style.transform = `scale(${isMobile ? 1.35 : 1.20}) translate3d(${combinedX}%, ${dy * -0.5}%, 0px)`;
+      const combinedX = currentPanX.current + dx * -1.8;
+      bgRef.current.style.transform = `scale(${isMobile ? 1.45 : 1.22}) translate3d(${combinedX}%, ${dy * -0.5}%, 0px)`;
     }
     if (fgRef.current) {
       fgRef.current.style.transform = `translate3d(${dx * 3}px, ${dy * 2}px, 0px)`;
@@ -114,13 +114,13 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
       onMouseLeave={handlePanEnd}
       className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none touch-pan-x tod-${timeOfDay} weather-${weatherMode}`}
     >
-      {/* ── Layer 1: 3D Touch Pan Background Artwork (Allows 100% full image pan left to right) ── */}
+      {/* ── Layer 1: 3D Touch Pan Master Background Artwork (Reveals 100% of uploaded widescreen image) ── */}
       <div
         ref={bgRef}
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-100 ease-out"
         style={{
           backgroundImage: `url('/images/dhaba-artwork.jpg')`,
-          transform: `scale(${isMobile ? 1.35 : 1.20}) translate3d(0%, 0px, 0px)`,
+          transform: `scale(${isMobile ? 1.45 : 1.22}) translate3d(0%, 0px, 0px)`,
           willChange: 'transform',
         }}
         aria-hidden="true"
