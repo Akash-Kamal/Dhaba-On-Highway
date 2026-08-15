@@ -7,12 +7,16 @@ interface HighwayShayariOverlayProps {
   reducedMotion: boolean;
 }
 
-// Clear positions strictly designed to avoid overlapping top-left Truck Horn Badge, center logo, and bottom player bar
+// Clear positions strictly designed according to the user's uploaded image (ONLY in Top & Bottom Red Box zones on mobile)
 const CLEAR_POSITIONS = [
-  'top-[24%] right-[4%] sm:top-[20%] sm:right-[10%]',
-  'bottom-[26%] right-[4%] sm:bottom-[28%] sm:right-[10%]',
-  'bottom-[26%] left-[4%] sm:bottom-[28%] sm:left-[10%]',
-  'top-[42%] right-[4%] sm:top-[38%] sm:right-[12%]',
+  // Top Red Box Zone (Sky Area below top controls & above DHABA title)
+  'top-[17%] left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:top-[18%] sm:right-[12%]',
+  // Bottom Red Box Zone (Road/Table Area below subtitle & above music player)
+  'top-[55%] left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:top-[56%] sm:right-[12%]',
+  // Bottom Red Box Zone Variation (Road/Table Area)
+  'top-[58%] left-1/2 -translate-x-1/2 sm:translate-x-0 sm:right-auto sm:top-[56%] sm:left-[12%]',
+  // Top Red Box Zone Variation (Sky Area)
+  'top-[19%] left-1/2 -translate-x-1/2 sm:translate-x-0 sm:right-auto sm:top-[18%] sm:left-[12%]',
 ];
 
 export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
@@ -57,7 +61,7 @@ export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
     const triggerQuote = () => {
       const nextQuote = getNextQuote();
 
-      // Pick random clear position
+      // Pick random clear position strictly inside Red Box zones
       let posIdx = Math.floor(Math.random() * CLEAR_POSITIONS.length);
       if (posIdx === lastIndexRef.current) {
         posIdx = (posIdx + 1) % CLEAR_POSITIONS.length;
@@ -95,7 +99,7 @@ export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
 
   return (
     <div
-      className={`fixed z-30 max-w-[200px] sm:max-w-md select-none transition-all duration-1000 group cursor-default ${positionClass} ${
+      className={`fixed z-30 w-[85vw] max-w-[280px] sm:max-w-md select-none transition-all duration-1000 group cursor-default text-center sm:text-left ${positionClass} ${
         isEntering
           ? 'opacity-95 translate-y-0 filter-none'
           : 'opacity-0 translate-y-3 blur-sm pointer-events-none'
@@ -105,7 +109,7 @@ export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
       }}
     >
       {/* Hand-painted text directly on atmospheric background with strong drop shadow */}
-      <div className="flex flex-col gap-0.5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+      <div className="flex flex-col items-center sm:items-start gap-0.5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
         {/* Optional Truck Badge Header */}
         {activeItem.specialBadge && (
           <div className="flex items-center gap-1 text-[9px] sm:text-[11px] font-mono text-amber-400 font-bold tracking-widest uppercase opacity-90">
@@ -114,7 +118,7 @@ export const HighwayShayariOverlay: React.FC<HighwayShayariOverlayProps> = ({
           </div>
         )}
 
-        {/* Hand-painted Shayari Text (Compact text-xs/text-sm on mobile) */}
+        {/* Hand-painted Shayari Text (Formatted cleanly inside mobile Red Box zones) */}
         <p className="font-devanagari text-xs sm:text-2xl font-bold text-amber-100/95 leading-snug sm:leading-relaxed tracking-wide drop-shadow-[0_3px_12px_rgba(0,0,0,0.95)]">
           &ldquo;{activeItem.text}&rdquo;
         </p>
