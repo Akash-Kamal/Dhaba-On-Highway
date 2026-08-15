@@ -39,16 +39,16 @@ export const ChaiInteraction: React.FC = () => {
     <div className="relative inline-block select-none group">
       {/* Tooltip on idle hover */}
       {phase === 'idle' && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded bg-black/80 text-amber-300 text-[11px] font-mono tracking-widest uppercase border border-amber-800/40 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-30">
+        <div className="absolute bottom-full left-0 mb-2 px-2.5 py-1 rounded bg-black/90 text-amber-300 text-[11px] font-mono tracking-widest uppercase border border-amber-800/40 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-30 shadow-xl">
           CHAI BREAK
         </div>
       )}
 
-      {/* Two-phase floating message */}
+      {/* Two-phase floating speech bubble message (Anchored to left-0 to prevent screen clipping) */}
       {message && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-amber-100 font-devanagari text-sm font-semibold border border-amber-500/40 shadow-2xl whitespace-nowrap z-30 animate-title-in">
+        <div className="absolute bottom-full left-0 mb-3 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-amber-100 font-devanagari text-sm font-semibold border border-amber-500/40 shadow-2xl whitespace-nowrap z-30 animate-title-in">
           {message}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-amber-900" />
+          <div className="absolute top-full left-5 border-4 border-transparent border-t-amber-900" />
         </div>
       )}
 
