@@ -21,26 +21,64 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
 }) => {
   const fgRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-  // ── Parallax on mouse move (desktop only) ─────────────────────────
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isMobile) return;
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const dx = (e.clientX - cx) / cx; // -1 to 1
-      const dy = (e.clientY - cy) / cy;
+  // Touch / Mouse 3D Pan States
+  const touchStartX = useRef<number>(0);
+  const currentPanX = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
 
+  // ── Touch / Drag 3D Pan Handlers (Finger Pan Left to Right) ────────
+  const handlePanStart = (clientX: number) => {
+    isDragging.current = true;
+    touchStartX.current = clientX - currentPanX.current;
+  };
+
+  const handlePanMove = (clientX: number) => {
+    if (!isDragging.current) return;
+    const deltaX = (clientX - touchStartX.current) * 0.12;
+    // Clamp horizontal pan between -24% (far right) and +24% (far left)
+    const newPanX = Math.max(-24, Math.min(24, deltaX));
+    currentPanX.current = newPanX;
+
+    if (bgRef.current) {
+      bgRef.current.style.transform = `scale(1.22) translate3d(${newPanX}%, 0px, 0px)`;
+    }
+  };
+
+  const handlePanEnd = () => {
+    isDragging.current = false;
+  };
+
+  // Mobile Device Tilt (Gyroscope) 3D Pan
+  useEffect(() => {
+    const handleGyro = (e: DeviceOrientationEvent) => {
+      if (isDragging.current || e.gamma === null) return;
+      const tiltPan = Math.max(-20, Math.min(20, e.gamma * 0.45));
+      currentPanX.current = tiltPan;
       if (bgRef.current) {
-        bgRef.current.style.transform = `scale(1.05) translate(${dx * -1.5}px, ${dy * -1.5}px)`;
+        bgRef.current.style.transform = `scale(1.22) translate3d(${tiltPan}%, 0px, 0px)`;
       }
-      if (fgRef.current) {
-        fgRef.current.style.transform = `translate(${dx * 3.5}px, ${dy * 2.5}px)`;
-      }
-    },
-    [isMobile]
-  );
+    };
+    window.addEventListener('deviceorientation', handleGyro, true);
+    return () => window.removeEventListener('deviceorientation', handleGyro, true);
+  }, []);
+
+  // ── Desktop Mouse Movement Parallax ────────────────────────────────
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (isDragging.current) return;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx;
+    const dy = (e.clientY - cy) / cy;
+
+    if (bgRef.current) {
+      const combinedX = currentPanX.current + dx * -1.2;
+      bgRef.current.style.transform = `scale(1.22) translate3d(${combinedX}%, ${dy * -0.5}%, 0px)`;
+    }
+    if (fgRef.current) {
+      fgRef.current.style.transform = `translate3d(${dx * 3}px, ${dy * 2}px, 0px)`;
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -61,16 +99,26 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
 
   return (
     <div
-      className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none tod-${timeOfDay} weather-${weatherMode}`}
+      onTouchStart={(e) => handlePanStart(e.touches[0].clientX)}
+      onTouchMove={(e) => handlePanMove(e.touches[0].clientX)}
+      onTouchEnd={handlePanEnd}
+      onMouseDown={(e) => handlePanStart(e.clientX)}
+      onMouseMove={(e) => isDragging.current && handlePanMove(e.clientX)}
+      onMouseUp={handlePanEnd}
+      onMouseLeave={handlePanEnd}
+      className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none touch-pan-x tod-${timeOfDay} weather-${weatherMode}`}
     >
-      {/* ── Layer 1: Original Artwork (Focal position tuned so Golu Highway Dhaba sign is fully visible) ── */}
+      {/* ── Layer 1: 3D Touch Pan Background Artwork ────────────────── */}
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-cover bg-[position:78%_center] sm:bg-[position:72%_center] bg-no-repeat transition-transform duration-75 ease-out scale-105"
-        style={{ backgroundImage: `url('/images/dhaba-artwork.jpg')` }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-100 ease-out"
+        style={{
+          backgroundImage: `url('/images/dhaba-artwork.jpg')`,
+          transform: 'scale(1.22) translate3d(0%, 0px, 0px)',
+          willChange: 'transform',
+        }}
         aria-hidden="true"
       />
-
 
       {/* ── Layer 2: Time-based cinematic colour grade ──────────────── */}
       <div
