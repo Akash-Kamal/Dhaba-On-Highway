@@ -89,8 +89,8 @@ export function App() {
 
           {/* Main Content Area */}
           <main className="flex-1 flex flex-col justify-between p-4 sm:p-8 relative z-20 h-full min-h-[100svh]">
-            {/* Top-Right Ambient Controls Widget */}
-            <div className="flex justify-end items-center pt-10 sm:pt-12">
+            {/* Top-Right Ambient Controls Widget (Offset on PC to prevent overlap with Hotspots Dock) */}
+            <div className="flex justify-end items-center pt-10 sm:pt-12 sm:pr-36 md:pr-44">
               <AmbientControls
                 volume={ambienceVolume}
                 onVolumeChange={(vol) => {
