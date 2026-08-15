@@ -108,12 +108,13 @@ export function App() {
                 isCharpaiMode ? 'opacity-30 scale-95 pointer-events-none' : 'opacity-100 scale-100'
               }`}
             >
-              {/* Line 0: GOLU HIGHWAY DHABA Badge */}
-              <div className="text-[10px] sm:text-xs font-mono tracking-[0.22em] text-amber-400 font-bold uppercase opacity-90 mb-1.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] flex items-center gap-1.5">
+              {/* Line 0: GOLU HIGHWAY DHABA Badge (Hindi Only) */}
+              <div className="text-xs sm:text-sm font-chandra tracking-wider text-amber-400 font-bold opacity-90 mb-1.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] flex items-center gap-2">
                 <span className="text-red-500">★</span>
-                <span>GOLU HIGHWAY DHABA • गोलू हाईवे ढाबा</span>
+                <span>गोलू हाईवे ढाबा</span>
                 <span className="text-red-500">★</span>
               </div>
+
 
               {/* Line 1: DHABA / ढाबा (Interactive Click Toggle) */}
 
