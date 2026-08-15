@@ -5,9 +5,10 @@
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-display: 'Bebas Neue', 'Oswald', sans-serif;
     --font-devanagari: 'Noto Sans Devanagari', sans-serif;
-    --font-truck: 'Rozha One', 'Rye', 'Alfa Slab One', 'Noto Sans Devanagari', serif;
+    --font-truck: 'Rye', 'Alfa Slab One', serif;
   }
 }
+
 
 
 body {
