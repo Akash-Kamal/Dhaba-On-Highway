@@ -37,7 +37,9 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
 
-
+  // Hover seek time preview states
+  const [hoverSeekTime, setHoverSeekTime] = useState<string | null>(null);
+  const [hoverSeekX, setHoverSeekX] = useState<number>(0);
 
   const [songInfo, setSongInfo] = useState<{ title: string; author: string; id: string }>({
     title: 'Ab Tere Dil Mein To',
@@ -45,7 +47,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     id: '2V56f0xBNsw',
   });
 
-  // Track playback time
+  // Fast smooth playback time tracking (every 250ms)
   useEffect(() => {
     const interval = setInterval(() => {
       if (playerRef.current && isPlaying) {
@@ -56,7 +58,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
           if (dur > 0) setDuration(dur);
         } catch (e) {}
       }
-    }, 1000);
+    }, 250);
     return () => clearInterval(interval);
   }, [isPlaying]);
 
@@ -109,8 +111,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     }
   };
 
+  // Interactive Click & Seek Track Handler
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-
     const p = playerRef.current;
     if (!p || duration <= 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
@@ -123,11 +125,23 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     } catch (err) {}
   };
 
+  // Hover Seek Time Preview Handler
+  const handleMouseMoveSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (duration <= 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const hoverX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+    const pct = hoverX / rect.width;
+    const hoverSeconds = pct * duration;
+    setHoverSeekTime(formatTime(hoverSeconds));
+    setHoverSeekX(hoverX);
+  };
+
   const handleVolumeToggle = () => {
     const p = playerRef.current;
     if (!p) return;
     if (isMuted) {
       p.unMute();
+      p.setVolume(volume || 80);
       setIsMuted(false);
     } else {
       p.mute();
@@ -135,30 +149,38 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     }
   };
 
-  const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
+  // Calculate exact playback progress percentage
+  const progressPct = duration > 0 ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 0;
 
   return (
-    <div className="w-full max-w-2xl mx-auto select-none px-2 sm:px-0">
-      {/* Hidden YouTube Engine */}
+    <div className="relative w-full z-30 select-none">
+      {/* Hidden YouTube Player Engine */}
       <YouTubePlayer
         playlistId={playlistId}
         volume={volume}
         isPlaying={isPlaying}
-        onStateChange={(state) => {
-          const ytStates = window.YT?.PlayerState;
-          if (ytStates) {
-            if (state === ytStates.PLAYING) setIsPlaying(true);
-            if (state === ytStates.PAUSED || state === ytStates.ENDED) setIsPlaying(false);
-          }
-        }}
-        onSongChange={(data) => setSongInfo(data)}
         onPlayerReady={(p) => {
           playerRef.current = p;
+          p.setVolume(volume);
         }}
-        onError={() => {}}
+        onSongChange={(info) => {
+          if (info) {
+            setSongInfo(info);
+          }
+        }}
+        onStateChange={(state) => {
+          if (state === 1) {
+            setIsPlaying(true);
+          } else if (state === 2 || state === 0) {
+            setIsPlaying(false);
+          }
+        }}
+        onError={() => {
+          console.warn('Playback error, skipping to next track');
+        }}
       />
 
-      {/* Modern Compact Pill Capsule Player Container (Matching Uploaded Image) */}
+      {/* Modern Compact Pill Capsule Player Container */}
       <div className="relative w-full rounded-full glass-pill-premium p-2.5 sm:p-3 shadow-2xl flex items-center justify-between gap-3 sm:gap-4 radio-glow overflow-hidden">
         
         {/* Glass Glare Top Highlight Streak */}
@@ -176,7 +198,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
           <span className="absolute w-2 h-2 rounded-full bg-white shadow-sm" />
         </div>
 
-        {/* Center Section: Track Info, Progress Bar & Live Time */}
+        {/* Center Section: Track Info, Interactive Seekable Progress Bar & Live Time */}
         <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1">
           {/* Song Title & Artist */}
           <div className="flex flex-col leading-tight min-w-0">
@@ -188,25 +210,45 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
             </div>
           </div>
 
-          {/* Interactive Progress Bar Slider */}
+          {/* Interactive Seekable Progress Bar Slider with Handle & Hover Preview */}
           <div
             onClick={handleSeek}
-            className="w-full h-1 bg-white/25 rounded-full overflow-hidden relative cursor-pointer group py-0.5"
-            title="Seek track position"
+            onMouseMove={handleMouseMoveSeek}
+            onMouseLeave={() => setHoverSeekTime(null)}
+            className="w-full h-1.5 hover:h-2 bg-white/25 rounded-full relative cursor-pointer group transition-all duration-200 flex items-center"
+            title="Click or drag to seek song position"
           >
+            {/* Live Hover Seek Time Preview Tooltip */}
+            {hoverSeekTime && (
+              <div
+                className="absolute bottom-full mb-2 px-2 py-0.5 rounded bg-black/90 text-amber-200 text-[10px] font-mono border border-amber-500/40 shadow-xl pointer-events-none -translate-x-1/2 z-50 whitespace-nowrap"
+                style={{ left: `${hoverSeekX}px` }}
+              >
+                {hoverSeekTime}
+              </div>
+            )}
+
+            {/* Filled Progress Line with Amber Glow */}
             <div
-              className="bg-white h-full rounded-full transition-all duration-300 group-hover:bg-amber-300 shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              className="bg-gradient-to-r from-amber-400 via-amber-300 to-white h-full rounded-full transition-all duration-100 shadow-[0_0_10px_rgba(251,191,36,0.8)]"
               style={{ width: `${progressPct}%` }}
+            />
+
+            {/* Scrubbing Thumb Knob Handle */}
+            <div
+              className="absolute w-3 h-3 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,1)] opacity-0 group-hover:opacity-100 transition-opacity -translate-x-1/2 pointer-events-none border border-amber-400"
+              style={{ left: `${progressPct}%` }}
             />
           </div>
 
-          {/* Time Display (3:41 / 8:25 style) */}
-          <div className="text-[11px] font-mono text-white/80 font-medium">
-            {formatTime(currentTime)} / {formatTime(duration || 325)}
+          {/* Time Display (3:41 / 8:25 live readout) */}
+          <div className="flex items-center justify-between text-[11px] font-mono text-white/80 font-medium">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration || 325)}</span>
           </div>
         </div>
 
-        {/* Right Section: Inline Controls (Shuffle, Prev, Hero Play/Pause, Next, Horn) */}
+        {/* Right Section: Inline Controls (Shuffle, Prev, Hero Play/Pause, Next) */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Shuffle Button */}
           <button
@@ -260,7 +302,6 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
           </button>
 
           {/* Volume Control Button */}
-
           <div className="relative">
             <button
               onClick={() => {
@@ -297,7 +338,6 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
             )}
           </div>
         </div>
-
 
       </div>
     </div>
