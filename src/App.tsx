@@ -26,6 +26,8 @@ export function App() {
   const [isLightOn, setIsLightOn] = useState<boolean>(true);
   const [isCharpaiMode, setIsCharpaiMode] = useState<boolean>(false);
   const [shayariEnabled, setShayariEnabled] = useState<boolean>(true);
+  const [isHindiDhaba, setIsHindiDhaba] = useState<boolean>(false);
+
 
   // Time of Day determination based on real clock
   const timeOfDay = useMemo(() => {
@@ -106,10 +108,18 @@ export function App() {
                 isCharpaiMode ? 'opacity-30 scale-95 pointer-events-none' : 'opacity-100 scale-100'
               }`}
             >
-              {/* Line 1: DHABA */}
-              <h1 className="font-truck-brand text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none">
-                DHABA
+              {/* Line 1: DHABA / ढाबा (Interactive Click Toggle) */}
+              <h1
+                onClick={() => {
+                  ambientSynth.playSwitchClick();
+                  setIsHindiDhaba((prev) => !prev);
+                }}
+                className="font-truck-brand text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 select-none group"
+                title="Click to toggle English / Hindi (DHABA ⇄ ढाबा)"
+              >
+                <span>{isHindiDhaba ? 'ढाबा' : 'DHABA'}</span>
               </h1>
+
 
               {/* Line 2: = ON HIGHWAY = */}
               <div className="flex items-center justify-center gap-2 sm:gap-3 font-display text-2xl sm:text-5xl md:text-6xl text-highway-amber tracking-widest uppercase font-extrabold leading-none mt-2">
