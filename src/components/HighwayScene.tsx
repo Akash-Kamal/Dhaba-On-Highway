@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CinematicOverlay } from './CinematicOverlay';
 
 interface HighwaySceneProps {
@@ -19,33 +19,121 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
   weatherMode,
   timeOfDay,
 }) => {
-  const fgRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const fgRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // ── Desktop Mouse Movement Parallax (Original) ──────────────────────
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isMobile) return;
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const dx = (e.clientX - cx) / cx;
-      const dy = (e.clientY - cy) / cy;
+  // Touch & Drag 3D Pan states
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const currentX = useRef(0); // Current pan offset in pixels
+  const targetX = useRef(0);
+  const animationFrameId = useRef<number | null>(null);
 
-      if (bgRef.current) {
-        bgRef.current.style.transform = `scale(1.05) translate(${dx * -1.5}px, ${dy * -1.5}px)`;
-      }
-      if (fgRef.current) {
-        fgRef.current.style.transform = `translate(${dx * 3.5}px, ${dy * 2.5}px)`;
-      }
-    },
-    [isMobile]
-  );
+  const [aspectRatioOffset, setAspectRatioOffset] = useState<number>(0);
 
+  // Measure full overflow width of landscape image when scaled to 100vh height
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [handleMouseMove]);
+    const img = new Image();
+    img.src = '/images/dhaba-artwork.jpg';
+    img.onload = () => {
+      const imgAspect = img.width / img.height;
+      const screenAspect = window.innerWidth / window.innerHeight;
+      if (imgAspect > screenAspect) {
+        // Calculate max scrollable pixel distance to show 100% of image
+        const renderedWidth = window.innerHeight * imgAspect;
+        const maxOffset = renderedWidth - window.innerWidth;
+        setAspectRatioOffset(maxOffset);
+        // Initial center pan
+        currentX.current = -maxOffset / 2;
+        targetX.current = -maxOffset / 2;
+      }
+    };
+  }, []);
+
+  // Smooth render loop for fluid 60fps 3D pan & tilt
+  useEffect(() => {
+    let active = true;
+
+    const render = () => {
+      if (!active) return;
+
+      // Smooth lerp towards target pan X position
+      currentX.current += (targetX.current - currentX.current) * 0.12;
+
+      if (bgRef.current && aspectRatioOffset > 0) {
+        // Calculate normalized pan ratio (-1 to +1)
+        const centerPan = currentX.current + aspectRatioOffset / 2;
+        const panRatio = centerPan / (aspectRatioOffset / 2 || 1);
+
+        // 3D Perspective Rotation & Translation
+        const rotateY = panRatio * -4.5; // Subtle 3D tilt angle
+        const translateX = currentX.current;
+
+        bgRef.current.style.transform = `translate3d(${translateX}px, 0px, 0px) rotateY(${rotateY}deg) scale(1.04)`;
+      }
+
+      animationFrameId.current = requestAnimationFrame(render);
+    };
+
+    render();
+    return () => {
+      active = false;
+      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+    };
+  }, [aspectRatioOffset]);
+
+  // Touch Handlers for Mobile Finger Swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDragging.current = true;
+    startX.current = e.touches[0].clientX - targetX.current;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current || aspectRatioOffset <= 0) return;
+    const x = e.touches[0].clientX;
+    let newX = x - startX.current;
+
+    // Clamp pan bounds so user can see 100% of the image from left edge (0) to right edge (-maxOffset)
+    newX = Math.max(-aspectRatioOffset, Math.min(0, newX));
+    targetX.current = newX;
+  };
+
+  const handleTouchEnd = () => {
+    isDragging.current = false;
+  };
+
+  // Mouse Drag Handlers for Desktop fallback
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true;
+    startX.current = e.clientX - targetX.current;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || aspectRatioOffset <= 0) return;
+    const x = e.clientX;
+    let newX = x - startX.current;
+    newX = Math.max(-aspectRatioOffset, Math.min(0, newX));
+    targetX.current = newX;
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  // Mobile Gyroscope tilt support
+  useEffect(() => {
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (isDragging.current || !e.gamma || aspectRatioOffset <= 0) return;
+      // Gamma is left/right tilt (-90 to +90)
+      const gamma = Math.max(-30, Math.min(30, e.gamma));
+      const normalizedTilt = (gamma + 30) / 60; // 0 (left) to 1 (right)
+      targetX.current = -normalizedTilt * aspectRatioOffset;
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation, true);
+    return () => window.removeEventListener('deviceorientation', handleOrientation, true);
+  }, [aspectRatioOffset]);
 
   const rainCount = RAIN_COUNT_MAP[weatherMode] ?? 28;
 
@@ -61,13 +149,30 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
 
   return (
     <div
-      className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none tod-${timeOfDay} weather-${weatherMode}`}
+      ref={containerRef}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none touch-pan-x tod-${timeOfDay} weather-${weatherMode}`}
+      style={{ perspective: '1200px' }}
     >
-      {/* ── Layer 1: Original Artwork (Exact Original Background) ───────────────── */}
+      {/* ── Layer 1: 3D Touch Pan Background (Shows 100% full artwork from left to right) ── */}
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-cover bg-[position:78%_center] sm:bg-[position:72%_center] bg-no-repeat transition-transform duration-75 ease-out scale-105"
-        style={{ backgroundImage: `url('/images/dhaba-artwork.jpg')` }}
+        className="absolute top-0 left-0 h-full max-w-none transition-transform duration-75 ease-out"
+        style={{
+          width: aspectRatioOffset > 0 ? `calc(100vw + ${aspectRatioOffset}px)` : '100vw',
+          backgroundImage: `url('/images/dhaba-artwork.jpg')`,
+          backgroundSize: aspectRatioOffset > 0 ? 'auto 100%' : 'cover',
+          backgroundPosition: 'left center',
+          backgroundRepeat: 'no-repeat',
+          transformStyle: 'preserve-3d',
+          willChange: 'transform',
+        }}
         aria-hidden="true"
       />
 
