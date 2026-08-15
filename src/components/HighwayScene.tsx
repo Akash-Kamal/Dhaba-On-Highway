@@ -63,13 +63,14 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
     <div
       className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none tod-${timeOfDay} weather-${weatherMode}`}
     >
-      {/* ── Layer 1: Original Artwork ───────────────────────────────── */}
+      {/* ── Layer 1: Original Artwork (Focal position tuned so Golu Highway Dhaba sign is fully visible) ── */}
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-75 ease-out scale-105"
+        className="absolute inset-0 bg-cover bg-[position:78%_center] sm:bg-[position:72%_center] bg-no-repeat transition-transform duration-75 ease-out scale-105"
         style={{ backgroundImage: `url('/images/dhaba-artwork.jpg')` }}
         aria-hidden="true"
       />
+
 
       {/* ── Layer 2: Time-based cinematic colour grade ──────────────── */}
       <div
