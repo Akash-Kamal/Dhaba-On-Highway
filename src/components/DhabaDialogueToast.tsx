@@ -35,9 +35,9 @@ export const DhabaDialogueToast: React.FC = () => {
   if (!dialogue) return null;
 
   return (
-    <div className="fixed top-16 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-full bg-[#1f150c]/90 border border-amber-500/40 text-amber-200 font-devanagari text-xs sm:text-sm font-medium shadow-2xl backdrop-blur-md flex items-center gap-2 animate-title-in select-none">
-      <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-      <span>{dialogue}</span>
+    <div className="fixed top-28 sm:top-32 left-1/2 -translate-x-1/2 z-40 max-w-[85vw] sm:max-w-md px-4 py-2 rounded-full bg-[#1f150c]/95 border border-amber-500/50 text-amber-200 font-devanagari text-xs sm:text-sm font-medium shadow-2xl backdrop-blur-md flex items-center justify-center gap-2 animate-title-in select-none pointer-events-none text-center">
+      <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse shrink-0" />
+      <span className="truncate">{dialogue}</span>
     </div>
   );
 };

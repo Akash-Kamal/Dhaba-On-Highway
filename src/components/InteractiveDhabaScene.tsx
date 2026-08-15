@@ -16,7 +16,7 @@ interface InteractiveDhabaSceneProps {
 const RetroBlowHornIcon: React.FC<{ isHonking: boolean }> = ({ isHonking }) => (
   <svg
     viewBox="0 0 210 100"
-    className="w-10 h-5 sm:w-14 sm:h-7 shrink-0 drop-shadow-md"
+    className="w-10 h-5 sm:w-13 sm:h-6.5 shrink-0 drop-shadow-md"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -41,29 +41,26 @@ const RetroBlowHornIcon: React.FC<{ isHonking: boolean }> = ({ isHonking }) => (
       </linearGradient>
     </defs>
 
-    {/* Red Rubber Squeeze Bulb (Left Sphere with squeeze effect when honking) */}
+    {/* Red Rubber Squeeze Bulb */}
     <g className={`transition-transform duration-150 origin-[35px_50px] ${isHonking ? 'scale-x-70 scale-y-115' : ''}`}>
       <circle cx="35" cy="50" r="30" fill="url(#bulbGrad)" stroke="#5e0000" strokeWidth="1.5" />
-      {/* Rubber Bulb Highlight */}
       <ellipse cx="25" cy="38" rx="9" ry="5" fill="#ffa8a8" opacity="0.65" transform="rotate(-20 25 38)" />
     </g>
 
     {/* Gold Collar Connector */}
     <rect x="62" y="44" width="12" height="12" rx="3" fill="#b37700" stroke="#ffd700" strokeWidth="1" />
 
-    {/* Tapered Brass Tube (From collar to flare) */}
+    {/* Tapered Brass Tube */}
     <path
       d="M72 45 L150 35 C155 35 162 20 172 12 L172 88 C162 80 155 65 150 65 L72 55 Z"
       fill="url(#brassGrad)"
       stroke="#b37700"
       strokeWidth="1"
     />
-    {/* Tube Specular Reflection Streak */}
     <path d="M75 47 L155 38" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
 
-    {/* Trumpet Mouth Flare Rim (Right Oval Mouth) */}
+    {/* Trumpet Mouth Flare Rim */}
     <ellipse cx="172" cy="50" rx="9" ry="38" fill="url(#flareGrad)" stroke="#fff066" strokeWidth="2" />
-    {/* Dark Inside Bell Hole */}
     <ellipse cx="172" cy="50" rx="5" ry="28" fill="#3a2000" opacity="0.95" />
 
     {/* Sound Waves when Honking */}
@@ -143,36 +140,36 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      {/* Dynamic Interaction Floating Toast */}
+      {/* Dynamic Interaction Floating Toast (Positioned at top-28/top-32 to NEVER overlap Horn or Dock) */}
       {toastMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-amber-100 font-devanagari text-sm font-bold border border-amber-400/50 shadow-2xl animate-title-in backdrop-blur-md flex items-center gap-2 select-none">
-          <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-          <span>{toastMsg}</span>
+        <div className="fixed top-28 sm:top-32 left-1/2 -translate-x-1/2 z-50 max-w-[85vw] sm:max-w-md px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-amber-100 font-devanagari text-xs sm:text-sm font-bold border border-amber-400/50 shadow-2xl animate-title-in backdrop-blur-md flex items-center justify-center gap-2 select-none pointer-events-none text-center">
+          <Sparkles className="w-4 h-4 text-amber-300 animate-spin shrink-0" />
+          <span className="truncate">{toastMsg}</span>
         </div>
       )}
 
       {/* Main Scene Content */}
       {children}
 
-      {/* LEFT SIDE: RETRO VINTAGE SQUEEZE BULB TRUCK HORN BADGE (MATCHING UPLOADED IMAGE) */}
-      <div className="fixed top-20 sm:top-24 left-3 sm:left-5 z-30 select-none origin-top-left">
+      {/* LEFT SIDE: RETRO VINTAGE SQUEEZE BULB TRUCK HORN BADGE (CLEAN NON-OVERLAPPING POSITIONING) */}
+      <div className="fixed top-14 sm:top-16 left-3 sm:left-5 z-30 select-none origin-top-left">
         <button
           onClick={handleTruckClick}
-          className={`group relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_22px_rgba(234,179,8,0.6)] hover:shadow-[0_6px_30px_rgba(234,179,8,0.85)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
+          className={`group relative flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 border-2 border-yellow-200 text-neutral-950 shadow-[0_4px_22px_rgba(234,179,8,0.6)] hover:shadow-[0_6px_30px_rgba(234,179,8,0.85)] hover:scale-105 active:scale-95 transition-all cursor-pointer ${
             isHonking ? 'animate-bounce ring-2 ring-red-500' : ''
           }`}
           title="Click to Squeeze Vintage Blow Horn"
           aria-label="Squeeze Vintage Blow Horn"
         >
-          {/* Retro Blow Horn Vector Icon (Red Squeeze Bulb + Gold Brass Trumpet Flare) */}
+          {/* Retro Blow Horn Vector Icon */}
           <RetroBlowHornIcon isHonking={isHonking} />
 
           {/* Creative Truck Art Typography */}
           <div className="flex flex-col text-left leading-tight font-mono pr-0.5">
-            <div className="text-[10px] sm:text-xs font-black tracking-widest text-red-950 uppercase">
+            <div className="text-[9px] sm:text-[10px] font-black tracking-widest text-red-950 uppercase">
               HORN OK PLEASE
             </div>
-            <div className="text-[9px] font-bold text-amber-950/80 tracking-wider">
+            <div className="text-[8px] sm:text-[9px] font-bold text-amber-950/80 tracking-wider">
               TAP TO SQUEEZE
             </div>
           </div>
@@ -180,7 +177,7 @@ export const InteractiveDhabaScene: React.FC<InteractiveDhabaSceneProps> = ({
       </div>
 
       {/* RIGHT SIDE: Interactive Environment Hotspots Floating Dock */}
-      <div className="fixed top-32 sm:top-36 right-3 sm:right-6 z-30 flex flex-col items-end gap-1.5 sm:gap-2 select-none scale-90 sm:scale-100 origin-top-right">
+      <div className="fixed top-14 sm:top-16 right-3 sm:right-5 z-30 flex flex-col items-end gap-1.5 sm:gap-2 select-none scale-90 sm:scale-100 origin-top-right">
 
         {/* Bhaiya Waiter Hotspot */}
         <button
