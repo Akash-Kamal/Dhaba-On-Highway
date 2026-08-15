@@ -19,32 +19,42 @@ const useHighwayCounter = () => {
   return Math.max(380, count);
 };
 
+/** Dynamic 12-hour live clock hook with real AM/PM determination */
 const useLocalTime = () => {
-  const [time, setTime] = useState('');
+  const [timeState, setTimeState] = useState<{ timeStr: string; ampm: string }>({
+    timeStr: '11:11',
+    ampm: 'PM',
+  });
+
   useEffect(() => {
     const update = () => {
       const now = new Date();
-      const h = now.getHours().toString().padStart(2, '0');
-      const m = now.getMinutes().toString().padStart(2, '0');
-      setTime(`${h}:${m}`);
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // 0 hour should be 12
+      const hoursStr = hours.toString().padStart(2, '0');
+      setTimeState({ timeStr: `${hoursStr}:${minutes}`, ampm });
     };
     update();
-    const id = setInterval(update, 30000);
+    const id = setInterval(update, 10000); // real-time update every 10s
     return () => clearInterval(id);
   }, []);
-  return time;
+
+  return timeState;
 };
 
 export const LiveHighwayHUD: React.FC<LiveHighwayHUDProps> = ({ onOpenMenu }) => {
   const count = useHighwayCounter();
-  const time = useLocalTime();
+  const { timeStr, ampm } = useLocalTime();
 
   return (
     <header className="ghost-hud absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-5 py-4 pointer-events-none select-none">
-      {/* Left — Live time */}
+      {/* Left — Live Real-Time Clock (e.g. 11:11 PM) */}
       <div className="pointer-events-auto">
         <span className="text-xs font-mono text-amber-300/90 tracking-widest">
-          {time} <span className="text-amber-600/60">AM</span>
+          {timeStr} <span className="text-amber-500 font-bold">{ampm}</span>
         </span>
       </div>
 
