@@ -34,7 +34,7 @@ export const HIGHWAY_SHAYARI_LIST: ShayariItem[] = [
   { id: '13', text: 'मोहब्बत भी हाईवे जैसी है, मोड़ बहुत आते हैं।', category: 'romantic' },
   { id: '14', text: 'तुम याद आए, रास्ता लंबा हो गया।', category: 'romantic' },
   { id: '15', text: 'कुछ सफ़र मंज़िल के लिए नहीं, खुद को ढूँढने के लिए होते हैं।', category: 'philosophical' },
-  { id: '16', text: 'रास्ते ख़ामोश थे, यादें बहुत शोर करती रहीं।', category: 'late-night' },
+  // { id: '16', text: 'रास्ते ख़ामोश थे, यादें बहुत शोर करती रहीं।', category: 'late-night' },
   { id: '17', text: 'रात लंबी थी, सफ़र उससे भी लंबा।', category: 'late-night' },
   { id: '18', text: 'जिसे घर जाना था, वो रास्तों में रह गया।', category: 'sad' },
   { id: '19', text: 'कुछ लोग सफ़र में मिलते हैं, ज़िंदगी भर याद रहते हैं।', category: 'nostalgia' },
