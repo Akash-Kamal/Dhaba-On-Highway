@@ -7,12 +7,10 @@ import {
   SkipBack,
   SkipForward,
   Shuffle,
-  Megaphone,
   Disc,
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { ambientSynth } from '../utils/audioSynth';
 
 interface MusicPlayerProps {
   playlistId?: string;
@@ -36,9 +34,10 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [isShuffleOn, setIsShuffleOn] = useState<boolean>(false);
-  const [isHornActive, setIsHornActive] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
+
+
 
   const [songInfo, setSongInfo] = useState<{ title: string; author: string; id: string }>({
     title: 'Ab Tere Dil Mein To',
@@ -110,13 +109,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
     }
   };
 
-  const handleHornClick = () => {
-    ambientSynth.playTruckHorn();
-    setIsHornActive(true);
-    setTimeout(() => setIsHornActive(false), 800);
-  };
-
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+
     const p = playerRef.current;
     if (!p || duration <= 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
@@ -265,21 +259,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playlistId }) => {
             <SkipForward className="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-current" />
           </button>
 
-          {/* Horn OK Please Airhorn Trigger Button */}
-          <button
-            onClick={handleHornClick}
-            className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-              isHornActive
-                ? 'bg-amber-400 text-black font-bold scale-110'
-                : 'bg-white/15 hover:bg-white/25 text-white border border-white/20'
-            }`}
-            title="Horn OK Please"
-            aria-label="Sound Horn"
-          >
-            <Megaphone className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isHornActive ? 'animate-bounce' : ''}`} />
-          </button>
-
           {/* Volume Control Button */}
+
           <div className="relative">
             <button
               onClick={() => {
