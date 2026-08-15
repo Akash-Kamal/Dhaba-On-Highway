@@ -102,34 +102,35 @@ export function App() {
 
             {/* CENTER HERO TITLE: VINTAGE TRUCK SLAB SERIF LOGO (MATCHING UPLOADED ARTWORK) */}
             <div
-              className={`flex-col items-center justify-center text-center px-2 sm:px-4 z-20 pt-6 sm:pt-0 sm:my-auto py-2 sm:py-6 transition-all duration-700 select-none ${
+              className={`flex-1 flex flex-col items-center justify-center text-center px-4 z-20 my-auto py-6 transition-all duration-700 select-none ${
                 isCharpaiMode ? 'opacity-30 scale-95 pointer-events-none' : 'opacity-100 scale-100'
               }`}
             >
               {/* Line 1: DHABA */}
-              <h1 className="font-truck-brand text-4xl xs:text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none">
+              <h1 className="font-truck-brand text-5xl sm:text-8xl md:text-[10rem] text-weathered-cream tracking-wider uppercase drop-shadow-[0_12px_35px_rgba(0,0,0,0.95)] leading-none">
                 DHABA
               </h1>
 
               {/* Line 2: = ON HIGHWAY = */}
-              <div className="flex items-center justify-center gap-1.5 sm:gap-3 font-display text-xl sm:text-5xl md:text-6xl text-highway-amber tracking-widest uppercase font-extrabold leading-none mt-1 sm:mt-2">
-                <span className="text-red-600 font-sans tracking-tighter opacity-90 text-base sm:text-4xl">═</span>
+              <div className="flex items-center justify-center gap-2 sm:gap-3 font-display text-2xl sm:text-5xl md:text-6xl text-highway-amber tracking-widest uppercase font-extrabold leading-none mt-2">
+                <span className="text-red-600 font-sans tracking-tighter opacity-90 text-xl sm:text-4xl">═</span>
                 <span>ON HIGHWAY</span>
-                <span className="text-red-600 font-sans tracking-tighter opacity-90 text-base sm:text-4xl">═</span>
+                <span className="text-red-600 font-sans tracking-tighter opacity-90 text-xl sm:text-4xl">═</span>
               </div>
 
               {/* Line 3: Devanagari Subtitle Quote */}
-              <p className="font-devanagari text-xs sm:text-2xl text-[#d4bca0] font-semibold mt-2 sm:mt-4 tracking-wide drop-shadow-md">
+              <p className="font-devanagari text-sm sm:text-2xl text-[#d4bca0] font-semibold mt-3 sm:mt-4 tracking-wide drop-shadow-md">
                 रुकिए ज़रा... सफ़र अभी बाक़ी है।
               </p>
 
               {/* Line 4: Red Vintage Dhaba Flourish Ornament */}
-              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-1.5 sm:mt-3 text-red-600/90 opacity-90">
-                <div className="h-[2px] w-6 sm:w-20 bg-gradient-to-r from-transparent via-red-600 to-red-500" />
-                <span className="text-[9px] sm:text-xs">❖</span>
-                <div className="h-[2px] w-6 sm:w-20 bg-gradient-to-l from-transparent via-red-600 to-red-500" />
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-2 sm:mt-3 text-red-600/90 opacity-90">
+                <div className="h-[2px] w-8 sm:w-20 bg-gradient-to-r from-transparent via-red-600 to-red-500" />
+                <span className="text-[10px] sm:text-xs">❖</span>
+                <div className="h-[2px] w-8 sm:w-20 bg-gradient-to-l from-transparent via-red-600 to-red-500" />
               </div>
             </div>
+
 
 
 

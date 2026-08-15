@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { CinematicOverlay } from './CinematicOverlay';
 
 interface HighwaySceneProps {
@@ -22,26 +22,6 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
   const fgRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-
-  // Responsive mobile vs desktop artwork background switching
-  const [artworkPath, setArtworkPath] = useState<string>(
-    typeof window !== 'undefined' && window.innerWidth < 640
-      ? '/images/dhaba-artwork-mobile.jpg'
-      : '/images/dhaba-artwork.jpg'
-  );
-
-  useEffect(() => {
-    const updateArtwork = () => {
-      if (window.innerWidth < 640) {
-        setArtworkPath('/images/dhaba-artwork-mobile.jpg');
-      } else {
-        setArtworkPath('/images/dhaba-artwork.jpg');
-      }
-    };
-    updateArtwork();
-    window.addEventListener('resize', updateArtwork);
-    return () => window.removeEventListener('resize', updateArtwork);
-  }, []);
 
   // ── Parallax on mouse move (desktop only) ─────────────────────────
   const handleMouseMove = useCallback(
@@ -83,11 +63,11 @@ export const HighwayScene: React.FC<HighwaySceneProps> = ({
     <div
       className={`relative w-screen h-[100svh] overflow-hidden bg-[#050505] select-none tod-${timeOfDay} weather-${weatherMode}`}
     >
-      {/* ── Layer 1: Artwork (Responsive Mobile vs Desktop) ─────────── */}
+      {/* ── Layer 1: Original Artwork ───────────────────────────────── */}
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500 ease-out scale-105"
-        style={{ backgroundImage: `url('${artworkPath}')` }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-75 ease-out scale-105"
+        style={{ backgroundImage: `url('/images/dhaba-artwork.jpg')` }}
         aria-hidden="true"
       />
 
